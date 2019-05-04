@@ -50,8 +50,6 @@ const physics = {
 };
 
 const getBeaconPulse = () => {
-  let x = window.performance.now();
-  let txt;
   const url =
     "https://cors-anywhere.herokuapp.com/https://beacon.nist.gov/beacon/2.0/pulse/last";
   const go = () => {
@@ -61,14 +59,8 @@ const getBeaconPulse = () => {
       xhr.onreadystatechange = () => (resp = xhr.responseText);
       xhr.open("GET", url);
       xhr.setRequestHeader("Accept", "application/json");
-
-      xhr.onload = resp => {
-        resolve(resp);
-      };
-      xhr.onerror = () => {
-        reject(new Error("there was an error making the request."));
-      };
-
+      xhr.onload = resp => resolve(resp);
+      xhr.onerror = err => reject(new Error(err));
       xhr.send();
     });
   };
