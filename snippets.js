@@ -1,19 +1,3 @@
-let stringlist = [
-  "hello",
-  "world",
-  "it's",
-  "a",
-  "day",
-  "test",
-  "today",
-  "longer",
-  "sulfuric",
-  "beautiful",
-  "hexadecimal",
-  "hydrochloric",
-  "deoxyribonucleic"
-];
-
 // javascript equivalent of sprintf
 
 String.prototype.sprintf = function(...args) {
@@ -50,9 +34,8 @@ String.prototype.sprintf = function(...args) {
     /%(?:\d+c)|%(?:\d+d)|%(?:\d+s)|%(?:\d+f)\b|%d|%s|%c|%b/gim
   );
   let arg = [];
-  if (args) {
-    for (let i = 0; i < args.length; i++) arg.push(args[i]);
-  }
+
+  for (let i = 0; i < args.length; i++) arg.push(args[i]);
   if (countCodes && arg) {
     if (countCodes.length > arg.length)
       throw new Error("more codes than arguments.");
@@ -108,9 +91,7 @@ String.prototype.sprintf = function(...args) {
     .join("")
     .match(/%(?:\d+c)|%(?:\d+d)|%(?:\d+s)|%(?:\d+f)\b|%d|%s|%c|%b/gim);
   if (countCodes && arg) {
-    if (countCodes.length > arg.length)
-      throw new Error("possible boolean consumption.");
-    if (countCodes.length < arg.length)
+    if (countCodes.length > arg.length || countCodes.length < arg.length)
       throw new Error("possible boolean consumption.");
   }
 
