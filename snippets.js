@@ -161,3 +161,10 @@ const getBeaconPulse = () => {
 
   return returnPulse();
 };
+
+// (S)ort (A)rray and (F)ilter (D)uplicates
+const safd = array => {
+  return Array.from(new Set(array))
+    .sort((a, b) => a - b)
+    .filter(c => c != undefined);
+};
