@@ -168,3 +168,20 @@ const safd = array => {
     .sort((a, b) => a - b)
     .filter(c => c != undefined);
 };
+
+// test if string is valid ipv4 address
+const isValidIP = address => {
+  let split = address.split(".");
+  if (split.length != 4) return false;
+  for (var i = 0; i < split.length; i++) {
+    console.log(split[i]);
+    if (
+      !(parseInt(split[i]) >= 0 && parseInt(split[i]) <= 255) ||
+      (split[i].length > 1 && parseInt(split[i].charAt(0)) == 0) ||
+      /[^\d]/.test(split[i])
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
