@@ -174,7 +174,6 @@ const isValidIP = address => {
   let split = address.split(".");
   if (split.length != 4) return false;
   for (var i = 0; i < split.length; i++) {
-    console.log(split[i]);
     if (
       !(parseInt(split[i]) >= 0 && parseInt(split[i]) <= 255) ||
       (split[i].length > 1 && parseInt(split[i].charAt(0)) == 0) ||
@@ -185,3 +184,50 @@ const isValidIP = address => {
   }
   return true;
 };
+
+// honestly, down here most of this stuff is just from codewars challenges
+
+// test for pangram - could be used to generate random pangrams or something?
+const isPangram = string => {
+  let alpha = "abcdefghijklmnopqrstuvwxyz";
+  let str = Array.from(new Set(string.toLowerCase().split("")))
+    .sort()
+    .filter(e => /[a-z]/.test(e) == true)
+    .join("");
+  if (alpha == str) return true;
+  return false;
+};
+
+// rot13 cipher function
+const rot13 = str => {
+  let input = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  let output = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+  let index = x => input.indexOf(x);
+  let translate = x => (index(x) > -1 ? output[index(x)] : x);
+  return str
+    .split("")
+    .map(translate)
+    .join("");
+};
+
+const comp = (array1, array2) => {
+  let a = array1.sort((a, b) => a - b);
+  let b = array2.sort((a, b) => a - b).filter((c, i) => Math.pow(a[i], 2) == c);
+  return b.length == a.length;
+};
+
+function songDecoder(song) {
+  return song
+    .split(/(WUB)+/)
+    .filter(w => w != "WUB")
+    .join(" ")
+    .trim();
+}
+
+const findOutlier = integers => {
+  return integers.filter(i => i % 2 == 0).length > 1
+    ? integers.filter(i => i % 2 != 0)[0]
+    : integers.filter(i => i % 2 == 0)[0];
+};
+console.log(findOutlier([0, 1, 2]));
+console.log(findOutlier([2, 6, 8, 10, 3]));
