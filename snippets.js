@@ -210,24 +210,19 @@ const rot13 = str => {
     .join("");
 };
 
-const comp = (array1, array2) => {
-  let a = array1.sort((a, b) => a - b);
-  let b = array2.sort((a, b) => a - b).filter((c, i) => Math.pow(a[i], 2) == c);
-  return b.length == a.length;
-};
-
-function songDecoder(song) {
-  return song
-    .split(/(WUB)+/)
-    .filter(w => w != "WUB")
-    .join(" ")
-    .trim();
-}
-
 const findOutlier = integers => {
   return integers.filter(i => i % 2 == 0).length > 1
     ? integers.filter(i => i % 2 != 0)[0]
     : integers.filter(i => i % 2 == 0)[0];
 };
-console.log(findOutlier([0, 1, 2]));
-console.log(findOutlier([2, 6, 8, 10, 3]));
+
+const snail = array => {
+  let rows = array.length;
+  let cols = array[0].length;
+  if (array.length == 0) return [];
+};
+console.log(snail([[1, 2, 3], [4, 5, 6], [7, 8, 9]]));
+console.log(
+  "snail test - working ? true : false",
+  snail([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [1, 2, 3, 6, 9, 8, 7, 4, 5]
+);
