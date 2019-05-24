@@ -216,13 +216,77 @@ const findOutlier = integers => {
     : integers.filter(i => i % 2 == 0)[0];
 };
 
-const snail = array => {
-  let rows = array.length;
-  let cols = array[0].length;
-  if (array.length == 0) return [];
+// convert hex color to rgb
+
+const hexToRGBA = hex => {
+  if (!hex || typeof hex != "string" || hex.length < 3)
+    throw new Error(hex, "is not a valid argument.");
+  // if string is standard RGB
+  if (hex.length == 6) {
+    let rgb = parseInt(hex, 16);
+    let r = (rgb >> 16) & 0xff;
+    let g = (rgb >> 8) & 0xff;
+    let b = rgb & 0xff;
+
+    if (isNaN(a) || isNaN(r) || isNaN(g) || isNaN(b)) {
+      throw new Error("please enter rgb(a) values only between 0 and F.");
+    }
+
+    return { r, g, b };
+  } else if (hex.length == 3) {
+    hex.split("");
+    hex = [hex[0], hex[0], hex[1], hex[1], hex[2], hex[2]];
+    hex = "0x" + hex.join("");
+    let rgb = parseInt(hex, 16);
+    let r = (rgb >> 16) & 0xff;
+    let g = (rgb >> 8) & 0xff;
+    let b = rgb & 0xff;
+
+    if (isNaN(a) || isNaN(r) || isNaN(g) || isNaN(b)) {
+      throw new Error("please enter rgb(a) values only between 0 and F.");
+    }
+
+    return { r, g, b };
+  } else if (hex.length == 8) {
+    let a = hex.substring(6, 8);
+    hex = hex.substring(0, 6);
+    let rgb = parseInt(hex, 16);
+    let r = (rgb >> 16) & 0xff;
+    let g = (rgb >> 8) & 0xff;
+    let b = rgb & 0xff;
+    a = "0x" + a;
+    a = parseInt(a);
+
+    if (isNaN(a) || isNaN(r) || isNaN(g) || isNaN(b)) {
+      throw new Error("please enter rgb(a) values only between 0 and F.");
+    }
+
+    return { r, g, b, a };
+  } else if (hex.length == 4) {
+    let a = hex.substring(3, 4).split("");
+
+    hex = hex.substring(0, 3).split("");
+    hex = [hex[0], hex[0], hex[1], hex[1], hex[2], hex[2]];
+    hex = "0x" + hex.join("");
+
+    a = [a[0], a[0]];
+    a = "0x" + a.join("");
+    a = parseInt(a);
+
+    let rgb = parseInt(hex, 16);
+    let r = (rgb >> 16) & 0xff;
+    let g = (rgb >> 8) & 0xff;
+    let b = rgb & 0xff;
+
+    if (isNaN(a) || isNaN(r) || isNaN(g) || isNaN(b)) {
+      throw new Error("please enter rgb(a) values only between 0 and F.");
+    }
+
+    return { r, g, b, a };
+  } else {
+    throw new Error(
+      hex,
+      "is not valid, or you entered some weird format that I forgot about."
+    );
+  }
 };
-console.log(snail([[1, 2, 3], [4, 5, 6], [7, 8, 9]]));
-console.log(
-  "snail test - working ? true : false",
-  snail([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) == [1, 2, 3, 6, 9, 8, 7, 4, 5]
-);
