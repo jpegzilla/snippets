@@ -221,7 +221,6 @@ const findOutlier = integers => {
 const hexToRGBA = hex => {
   if (!hex || typeof hex != "string" || hex.length < 3)
     throw new Error(hex, "is not a valid argument.");
-  // if string is standard RGB
   if (hex.length == 6) {
     let rgb = parseInt(hex, 16);
     let r = (rgb >> 16) & 0xff;
