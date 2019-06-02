@@ -289,3 +289,32 @@ const hexToRGBA = hex => {
     );
   }
 };
+
+// difference between two arrays
+// returns an array with only elements from a that are not contained in b
+
+const difference = (a, b) => a.filter(x => !new Set(b).has(x));
+
+// binary to text
+const binToText = input => parseInt(input, 2).toString(10);
+
+// is ascii the right term?
+const binToASCII = input => {
+  let out = input.match(/[10]{8}/g)
+    ? input
+        .match(/[10]{8}/g)
+        .map(e => String.fromCharCode(parseInt(e, 2)))
+        .join("")
+    : null;
+  return out;
+};
+
+// there's gotta be a shorter way to write this I swear to god
+// but for now this is it.
+const textToBin = input => {
+  let out = "";
+  for (var i = 0; i < input.length; i++) {
+    out += input[i].charCodeAt(0).toString(2) + "";
+  }
+  return out;
+};
