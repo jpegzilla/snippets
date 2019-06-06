@@ -318,3 +318,12 @@ const textToBin = input => {
   }
   return out;
 };
+
+var object = { hello: "world" };
+
+// I don't know why I'm so proud of this. es6 just makes things so sexy.
+const removeProperty = (obj, prop) =>
+  obj.hasOwnProperty(prop) ? delete obj[prop] : false;
+
+// removeProperty(object, Object.keys(object)[0]);
+// console.log(object);
