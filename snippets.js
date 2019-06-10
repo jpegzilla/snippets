@@ -101,18 +101,8 @@ String.prototype.sprintf = function(...args) {
 };
 
 const strings = {
-  shortest: function(array) {
-    let c = array;
-    c.sort((a, b) => a.length - b.length);
-    m = c[0];
-    return m;
-  },
-  longest: function(array) {
-    let c = array;
-    c.sort((a, b) => b.length - a.length);
-    m = c[0];
-    return m;
-  }
+  shortest: arr => arr.sort((a, b) => a.length - b.length)[0],
+  longest: arr => arr.sort((a, b) => b.length - a.length)[0]
 };
 
 const physics = {
@@ -163,15 +153,30 @@ const getBeaconPulse = () => {
 };
 
 // (S)ort (A)rray and (F)ilter (D)uplicates
-const safd = array => {
-  return Array.from(new Set(array))
+const safd = array =>
+  Array.from(new Set(array))
     .sort((a, b) => a - b)
     .filter(c => c != undefined);
-};
 
 // test if string is valid ipv4 address
 const isValidIP = address => {
   let split = address.split(".");
+  if (split.length != 4) return false;
+  for (var i = 0; i < split.length; i++) {
+    if (
+      !(parseInt(split[i]) >= 0 && parseInt(split[i]) <= 255) ||
+      (split[i].length > 1 && parseInt(split[i].charAt(0)) == 0) ||
+      /[^\d]/.test(split[i])
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// alternate method on string proto
+String.prototype.isValidIPV4 = function(arg) {
+  let split = this.valueOf().split(".");
   if (split.length != 4) return false;
   for (var i = 0; i < split.length; i++) {
     if (
@@ -210,11 +215,10 @@ const rot13 = str => {
     .join("");
 };
 
-const findOutlier = integers => {
-  return integers.filter(i => i % 2 == 0).length > 1
+const findOutlier = integers =>
+  integers.filter(i => i % 2 == 0).length > 1
     ? integers.filter(i => i % 2 != 0)[0]
     : integers.filter(i => i % 2 == 0)[0];
-};
 
 // convert hex color to rgb
 
@@ -319,20 +323,15 @@ const textToBin = input => {
   return out;
 };
 
-var object = { hello: "world" };
-
 // I don't know why I'm so proud of this. es6 just makes things so sexy.
 const removeProperty = (obj, prop) =>
   obj.hasOwnProperty(prop) ? delete obj[prop] : false;
-
-// removeProperty(object, Object.keys(object)[0]);
-// console.log(object);
 
 // (very rough) implementation of time based one-time passwords. new one every 30 seconds.
 
 /**
  * @param {String} secret
- * @param {Number} output length
+ * @param {Number} length
  */
 
 const getTOTP = (b, len) => {
