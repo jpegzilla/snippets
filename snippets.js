@@ -327,3 +327,41 @@ const removeProperty = (obj, prop) =>
 
 // removeProperty(object, Object.keys(object)[0]);
 // console.log(object);
+
+// (very rough) implementation of time based one-time passwords. new one every 30 seconds.
+
+/**
+ * @param {String} secret
+ * @param {Number} output length
+ */
+
+const getTOTP = (b, len) => {
+  const dectohex = s => (s < 15.5 ? "0" : "") + Math.round(s).toString(16);
+  const hextodec = s => parseInt(s, 16);
+  const leftpad = (s, l, p) =>
+    l + 1 >= s.length ? Array(l + 1 - s.length).join(p) + s : s;
+
+  const base32tohex = b => {
+    let r = "";
+    let h = "";
+    for (i = 0; i < b.toString().length; i++) {
+      r = b
+        .toString()
+        .charCodeAt(i)
+        .toString(16);
+      h += r;
+    }
+    return h.replace(/\D/g, "");
+  };
+
+  let epoch = Math.round(new Date().getTime() / 1000);
+  let time = leftpad(dectohex(Math.floor(epoch / 30)), 16, "0");
+  let newsecret = base32tohex(b);
+
+  let a = [];
+  for (let i = 1; i < len + 1; i++) {
+    let b = hextodec(time) * i * parseInt(newsecret.toString().substring(0, 8));
+    a.push(b.toString().charAt(b.toString().length - 3));
+  }
+  return a.join("");
+};
