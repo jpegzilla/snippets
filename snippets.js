@@ -368,30 +368,93 @@ const getTOTP = (b, len) => {
 // generate a random are.na block url. requires cors
 
 const randomArenaBlock = () => {
-  const baseUrl = "https://www.are.na/block/";
+  const baseUrl =
+    "https://cors-anywhere.herokuapp.com/https://www.are.na/block/";
+
+  const reqUrl = "https://www.are.na/block/";
 
   const rDigits = d =>
     `${"x".repeat(d)}`.replace(/x/g, a => (Math.random() * 9) | 0);
 
-  let randUrl = `${baseUrl}${rDigits(7)}`;
+  let digits = rDigits(7);
+
+  let randUrl = {
+    request: `${baseUrl}${digits}`,
+    set: `${reqUrl}${digits}`
+  };
 
   let found = "";
 
   const checkBlock = a => {
     return new Promise((resolve, reject) => {
-      fetch(a, { method: "HEAD" }).then(resp => {
-        if (resp.ok == false) {
-          return randomArenaBlock();
-        } else {
-          resolve(resp);
-          return resp;
+      fetch(randUrl.request, {
+        method: "HEAD",
+        headers: {
+          origin: "https://jpegzilla.com"
         }
-      });
+      })
+        .then(resp => {
+          if (resp.status != 200) {
+            return randomArenaBlock();
+          } else resolve(resp);
+        })
+        .catch(err => {
+          return new Error(err);
+        });
     });
   };
 
   checkBlock(randUrl).then(resp => {
-    let tab = window.open(resp.url, "_blank");
+    let tab = window.open(randUrl.set, "_blank");
+    tab.focus();
+    return resp.url;
+  });
+};
+
+const randomYoutubeVideo = () => {
+  const reqUrl = "https://youtube.com/watch?v=";
+  const baseUrl =
+    "https://cors-anywhere.herokuapp.com/https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=";
+
+  const charList =
+    "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+
+  const rUrl = () => {
+    let output = "";
+    for (var i = 0; i < 11; i++) {
+      output += Array.from(charList)[(Math.random() * charList.length) | 0];
+    }
+
+    return {
+      request: `${baseUrl + output}`,
+      set: `${reqUrl + output}`
+    };
+  };
+
+  const checkVid = a => {
+    return new Promise((resolve, reject) => {
+      fetch(rUrl().request, {
+        method: "HEAD",
+        headers: {
+          origin: "https://jpegzilla.com"
+        }
+      })
+        .then(resp => {
+          console.log(resp);
+          if (resp.status != 200) {
+            setTimeout(function() {
+              return randomYoutubeVideo();
+            }, 2000);
+          } else resolve(resp);
+        })
+        .catch(err => {
+          return new Error(err);
+        });
+    });
+  };
+
+  checkVid(rUrl()).then(resp => {
+    let tab = window.open(rUrl().set, "_blank");
     tab.focus();
     return resp.url;
   });
