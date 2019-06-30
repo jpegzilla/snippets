@@ -364,3 +364,35 @@ const getTOTP = (b, len) => {
   }
   return a.join("");
 };
+
+// generate a random are.na block url. requires cors
+
+const randomArenaBlock = () => {
+  const baseUrl = "https://www.are.na/block/";
+
+  const rDigits = d =>
+    `${"x".repeat(d)}`.replace(/x/g, a => (Math.random() * 9) | 0);
+
+  let randUrl = `${baseUrl}${rDigits(7)}`;
+
+  let found = "";
+
+  const checkBlock = a => {
+    return new Promise((resolve, reject) => {
+      fetch(a, { method: "HEAD" }).then(resp => {
+        if (resp.ok == false) {
+          return randomArenaBlock();
+        } else {
+          resolve(resp);
+          return resp;
+        }
+      });
+    });
+  };
+
+  checkBlock(randUrl).then(resp => {
+    let tab = window.open(resp.url, "_blank");
+    tab.focus();
+    return resp.url;
+  });
+};
