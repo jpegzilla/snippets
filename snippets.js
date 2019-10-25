@@ -129,7 +129,6 @@ const getBeaconPulse = () => {
   const url =
     "https://cors-anywhere.herokuapp.com/https://beacon.nist.gov/beacon/2.0/pulse/last";
   const go = () => {
-    let resp;
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.onreadystatechange = () => (resp = xhr.responseText);
@@ -317,9 +316,9 @@ const binToASCII = input => {
 // but for now this is it.
 const textToBin = input => {
   let out = "";
-  for (var i = 0; i < input.length; i++) {
+  for (var i = 0; i < input.length; i++)
     out += input[i].charCodeAt(0).toString(2) + "";
-  }
+
   return out;
 };
 
@@ -383,8 +382,6 @@ const randomArenaBlock = () => {
     set: `${reqUrl}${digits}`
   };
 
-  let found = "";
-
   const checkBlock = a => {
     return new Promise((resolve, reject) => {
       fetch(randUrl.request, {
@@ -433,7 +430,7 @@ const randomYoutubeVideo = () => {
 
   const checkVid = a => {
     return new Promise((resolve, reject) => {
-      fetch(rUrl().request, {
+      fetch(a.request, {
         method: "HEAD",
         headers: {
           origin: "https://jpegzilla.com"
@@ -458,4 +455,49 @@ const randomYoutubeVideo = () => {
     tab.focus();
     return resp.url;
   });
+};
+
+const floydSteinberg = (sb, w, h) => {
+  for (var i = 0; i < h; i++)
+    for (var j = 0; j < w; j++) {
+      var ci = i * w + j; // current buffer index
+      var cc = sb[ci]; // current color
+      var rc = cc < 128 ? 0 : 255; // real (rounded) color
+      var err = cc - rc; // error amount
+      sb[ci] = rc; // saving real color
+      if (j + 1 < w) sb[ci + 1] += (err * 7) >> 4; // if right neighbor exists
+      if (i + 1 == h) continue; // if we are in the last line
+      if (j > 0) sb[ci + w - 1] += (err * 3) >> 4; // bottom left neighbor
+      sb[ci + w] += (err * 5) >> 4; // bottom neighbour
+      if (j + 1 < w) sb[ci + w + 1] += (err * 1) >> 4; // bottom right neighbor
+    }
+};
+
+const add = (...args) => {
+  let z = 0;
+  args.forEach(a => (z += a));
+  return z;
+};
+
+// generate a uuidv4
+const uuidv4 = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    let r = (Math.random() * 16) | 0,
+      v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
+// get url vars
+const getUrlVars = () => {
+  var a = {};
+  window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (i, j, k) => {
+    a[j] = k;
+  });
+  return a;
+};
+
+// remove cookie by name
+const removeCookie = cookiename => {
+  document.cookie = `${cookiename}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
 };
