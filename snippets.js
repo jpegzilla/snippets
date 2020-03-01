@@ -214,6 +214,31 @@ const rot13 = str => {
     .join("");
 };
 
+// this has not been tested
+const rotx = (str, x, decrypt = false) => {
+  let ccArr = [],
+    limits = { upper: [97, 122], lower: [65, 90] },
+    charCode;
+
+  if (decrypt) x *= -1;
+
+  x = x % 26;
+
+  for (let i = 0; i < str.length; i++) {
+    charCode = str.charCodeAt(i);
+
+    if (charCode >= limits.lower[0] && charCode <= limits.lower[1]) {
+      ccArr[i] = ((charCode - limits.upper[0] + x) % 26) + limits.upper[0];
+    } else if (charCode >= limits.upper[0] && charCode <= limits.upper[1]) {
+      ccArr[i] = ((charCode - limits.upper[0] + x) % 26) + limits.upper[0];
+    } else {
+      ccArr[i] = charCode;
+    }
+  }
+
+  return String.fromCharCode(...ccArr);
+};
+
 const findOutlier = integers =>
   integers.filter(i => i % 2 == 0).length > 1
     ? integers.filter(i => i % 2 != 0)[0]
