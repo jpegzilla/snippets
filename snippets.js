@@ -526,3 +526,11 @@ const getUrlVars = () => {
 const removeCookie = cookiename => {
   document.cookie = `${cookiename}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
 };
+
+// chrome bookmark date to standard date object
+const chromeDtToDate = st_dt => {
+  const microseconds = parseInt(st_dt, 10);
+  const millis = microseconds / 1000;
+  const past = new Date(1601, 0, 1).getTime();
+  return new Date(past + millis);
+};
